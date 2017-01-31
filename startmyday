@@ -1,19 +1,26 @@
 #!/bin/sh
 
 ENVROOT="~/Projects/bahmni"
-ideaParams="$ENVROOT/openmrs-module-bahmniapps $ENVROOT/forks/possible-config"
+#ideaParams="$ENVROOT/openmrs-module-bahmniapps $ENVROOT/forks/possible-config"
+ideaParams=""
 chromeParams="https://bahmni.mingle.thoughtworks.com/projects/possible https://mail.google.com/mail/u/0/#inbox https://mail.google.com/mail/u/1/#inbox"
 codeParams="$ENVROOT/bahmni-package"
 
+notes="open -a /Applications/Notes.app"
+skype="open -a /Applications/Skype.app"
 iterm="open -a /Applications/iTerm.app"
-idea="open -a /Applications/idea\ IntelliJ.app $ideaParams"
+idea="open -a /Applications/IntelliJ\ IDEA.app $ideaParams"
 chrome="open -a /Applications/Google\ Chrome.app $chromeParams"
 slack="open -a /Applications/Slack.app"
-vagrantup="cd $ENVROOT/bahmni-vagrant && vagrant up && cd - && say 'Vagrant is Ready'"
+vagrantup="cd $ENVROOT/bahmni-vagrant && vagrant up && alertOnChrome 'Done: Vagrant up'"
 code="open -a /Applications/Visual\ Studio\ Code.app $codeParams"
 
 load (){
-	eval $* > /dev/null 2>&1 &
+	sleep 6
+	eval $* > /dev/null &
+}
+alertOnChrome() {
+	osascript -e "tell app \"Chrome\" to display dialog \"$1\""
 }
 
 echo "Loading DEV environment Parallely"
@@ -22,5 +29,8 @@ load ${idea}
 load ${slack}
 load ${chrome}
 load ${iterm}
-load ${code}
+load ${notes}
+load ${skype}
+
+#load ${code}
 exit 0
